@@ -34,7 +34,6 @@ async function General() {
     console.log(pokemones[2].name);
 }
 
-General();
 
 async function FiltroConexion(filtroelegido) {   // ← faltaba async
     let pokesfiltrados = await conexion(filtroelegido);  // ← faltaba let
