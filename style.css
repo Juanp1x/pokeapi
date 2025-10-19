@@ -100,7 +100,7 @@ nav button:active {
 }
 
 /* ===== FILTROS DE TIPO ===== */
-#root > div:first-child {
+.c-filtro {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -108,7 +108,7 @@ nav button:active {
   margin-bottom: 20px;
 }
 
-#root > div:first-child button {
+.c-filtro button {
   background: linear-gradient(to bottom, var(--pokemon-red), #cc0000);
   color: white;
   border: none;
@@ -122,7 +122,7 @@ nav button:active {
   font-size: 12px;
 }
 
-#root > div:first-child button:hover {
+.c-filtro button:hover {
   background: linear-gradient(to bottom, #ff3333, #dd0000);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -136,7 +136,8 @@ nav button:active {
   margin-top: 30px;
 }
 
-.un-pokemon {
+/* Estilos para los elementos de pokémon en las listas */
+.c-lista-pokemon, .c-unpoke, .c-un_aleatorio {
   background: linear-gradient(135deg, var(--pokemon-yellow), var(--pokemon-light-yellow));
   border-radius: 15px;
   padding: 15px;
@@ -149,12 +150,12 @@ nav button:active {
   overflow: hidden;
 }
 
-.un-pokemon:hover {
+.c-lista-pokemon:hover, .c-unpoke:hover, .c-un_aleatorio:hover {
   transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.un-pokemon::before {
+.c-lista-pokemon::before, .c-unpoke::before, .c-un_aleatorio::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -166,7 +167,7 @@ nav button:active {
   opacity: 0.2;
 }
 
-.un-pokemon::after {
+.c-lista-pokemon::after, .c-unpoke::after, .c-un_aleatorio::after {
   content: '';
   position: absolute;
   bottom: -10px;
@@ -178,7 +179,7 @@ nav button:active {
   opacity: 0.2;
 }
 
-.un-pokemon p {
+.c-lista-pokemon p, .c-unpoke p, .c-un_aleatorio p {
   font-weight: bold;
   font-size: 16px;
   color: #2c3e50;
@@ -186,7 +187,7 @@ nav button:active {
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-.un-pokemon img {
+.c-lista-pokemon img, .c-unpoke img, .c-un_aleatorio img {
   width: 120px;
   height: 120px;
   background-color: white;
@@ -197,8 +198,68 @@ nav button:active {
   transition: all 0.3s ease;
 }
 
-.un-pokemon:hover img {
+.c-lista-pokemon:hover img, .c-unpoke:hover img, .c-un_aleatorio:hover img {
   transform: rotate(5deg) scale(1.1);
+}
+
+/* Estilos para pokémon capturados */
+.c-mios-pokemon {
+  background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+  border: 3px solid #2E7D32 !important;
+}
+
+/* ===== VISTA DE DETALLE ===== */
+.c-detalle {
+  text-align: center;
+  padding: 20px;
+}
+
+.c-detalle button {
+  background: linear-gradient(to bottom, var(--pokemon-blue), var(--pokemon-dark-blue));
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  margin: 10px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.c-detalle button:hover {
+  background: linear-gradient(to bottom, #4a8be5, #3a6ab0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.c-detalle img {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 15px;
+  border: 4px solid var(--pokemon-blue);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
+}
+
+.c-detalle h2 {
+  font-size: 2.5em;
+  color: var(--pokemon-yellow);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 10px 0;
+  text-transform: capitalize;
+}
+
+.c-detalle p {
+  font-size: 1.1em;
+  margin: 8px 0;
+  color: white;
+}
+
+.c-detalle p b {
+  color: var(--pokemon-yellow);
 }
 
 /* ===== POKEBALL DECORATIVA ===== */
@@ -226,6 +287,11 @@ nav button:active {
   border: 2px solid white;
 }
 
+/* ===== BOTONES ESPECIALES ===== */
+button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   nav {
@@ -243,13 +309,22 @@ nav button:active {
     gap: 15px;
   }
   
-  .un-pokemon {
+  .c-lista-pokemon, .c-unpoke, .c-un_aleatorio {
     padding: 10px;
   }
   
-  .un-pokemon img {
+  .c-lista-pokemon img, .c-unpoke img, .c-un_aleatorio img {
     width: 100px;
     height: 100px;
+  }
+  
+  .c-detalle img {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .c-detalle h2 {
+    font-size: 2em;
   }
 }
 
@@ -258,12 +333,21 @@ nav button:active {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   }
   
-  .un-pokemon p {
+  .c-lista-pokemon p, .c-unpoke p, .c-un_aleatorio p {
     font-size: 14px;
   }
   
-  .un-pokemon img {
+  .c-lista-pokemon img, .c-unpoke img, .c-un_aleatorio img {
     width: 80px;
     height: 80px;
+  }
+  
+  .c-detalle img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .c-detalle h2 {
+    font-size: 1.8em;
   }
 }
