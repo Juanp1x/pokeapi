@@ -1,35 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav>
-    <button onclick="Home()">Home</button>
-    <button onclick="informacion()">informacion</button>
-    <button onclick="Capturadosoriginal()">Capturados</button>
-    <button onclick="Favoritos()">Favoritos</button>
+  <nav>
+   <nav>
+    <button onclick="home()">Home</button>
+    <button onclick="informativa()">Informativa</button>
+    <button onclick="Capturados()">Capturados</button>
+    <button onclick="favoritos()">Favoritos</button>
 </nav>
 
-<div id="root">
-    <!-- aqui se agrega lo que hagamos en js -->
-</div>
+  </nav>
 
-<!-- ✅ Scripts deben ir aquí, fuera del <nav> -->
-<script src="Js/Home.js"></script>
-<script src="Js/capturados.js"></script>
-<script src="Js/favoritos.js"></script>
-<script src="Js/informacion.js"></script>
-<script src="Js/pokemon.js"></script>
-<script src="Js/conexion.js"></script>
-</body>
-   <script>
-
-        document.addEventListener("DOMContentLoaded",General)
-
-    </script>
+  <div id="root">
     
+  </div>
+
+<script src="Js/conexion.js"></script>
+<script src="Js/Home.js"></script>
+<script src="Js/pokemon.js"></script>
+<script src="Js/favoritos.js"></script>
+<script src="Js/capturados.js"></script>
+<script src="Js/informacion.js"></script>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", general);
+  </script>
+</body>
 </html>

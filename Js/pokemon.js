@@ -1,71 +1,91 @@
-var esFavorito = false;
+var misNumeros = JSON.parse(localStorage.getItem("misNumeros")) || [];
 
-// Función para agregar o quitar un Pokémon de favoritos
-function toggleFavorito(paramid, paramname) {
+function Aleatorios() {
+  const nuevos = document.getElementById("nuevos");
+  nuevos.innerHTML = "";
+  console.log("----------------------------------");
 
-    // Leer favoritos actuales desde localStorage
-    let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    let existe = false;
+  let pokesAleatorios = "";
 
-    // Verificar si ya está guardado
-    for (let i = 0; i < favoritos.length; i++) {
-        if (favoritos[i].name === paramname) {
-            existe = true;
-            break;
-        }
+  for (let i = 0; i < 4; i++) {
+    let num = Math.floor(Math.random() * pokemones.length) + 1;
+
+    pokesAleatorios += `
+      <div class="c-lista-pokemon c-un_aleatorio">
+        <p>${num}</p>
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${num}.png" 
+             alt="${pokemones[num - 1].name}" width="60" height="60">
+        <p>${pokemones[num - 1].name}</p>
+      </div>`;
+
+    // Comprobar si ya existe
+    misNumeros = JSON.parse(localStorage.getItem("misNumeros")) || [];
+    if (!misNumeros.includes(num)) {
+      misNumeros.push(num);
+      localStorage.setItem("misNumeros", JSON.stringify(misNumeros));
+
+      const elemento = document.getElementById("c-unpoke-" + num);
+      if (elemento) {
+        elemento.innerHTML = `
+          <div onclick="detalle('${num}')">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${num}.png" 
+                 width="auto" height="45" loading="lazy" alt="${num}">
+            <p>${num}</p>
+          </div>`;
+        elemento.classList.add("c-mios-pokemon");
+      }
     }
+  }
 
-    if (existe) {
-        // Si ya existe, lo eliminamos
-        favoritos = favoritos.filter(poke => poke.name !== paramname);
-        esFavorito = false;
-    } else {
-        // Si no está, lo agregamos
-        favoritos.push({
-            name: paramname,
-            url: `https://pokeapi.co/api/v2/pokemon/${paramid}/`
-        });
-        esFavorito = true;
-    }
-
-    // Guardar el array actualizado en localStorage
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
-
-    // Actualizar el icono en pantalla (si existe el botón)
-    const boton = document.querySelector(`#corazon-${paramid}`);
-    if (boton) boton.textContent = esFavorito ? "❤" : "🤍";
+  nuevos.innerHTML = pokesAleatorios;
+  document.getElementById("contador").innerHTML = `${misNumeros.length} / ${totalPokes}`;
 }
 
-// Función para mostrar el detalle del Pokémon
-async function Detalle(id) {
-        
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    const data = await res.json();
+function Capturados() {
+  const root = document.getElementById("root");
+  root.innerHTML = "";
 
-    const tipos = data.types.map(t => t.type.name).join(", ");
+  // Crear sección aleatoria
+  const capturaAleatorea = document.createElement("section");
+  capturaAleatorea.classList.add("c-lista");
+  capturaAleatorea.id = "nuevos";
 
-    // Verificamos si ya está en favoritos para mostrar el corazón correcto
-    let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    const esFavoritoActual = favoritos.some(poke => poke.name === data.name);
+  // Botón de aleatorios
+  const boton = document.createElement("button");
+  boton.textContent = "4 nuevos";
+  boton.addEventListener("click", Aleatorios);
 
-    const detalle = `
-        <section class="c-detalle">
-            <button onclick="home()">← Volver</button>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.id}.png" 
-                 alt="${data.name}" height="120">
-            <h2>${data.name}</h2>
-            <p><b>ID:</b> ${data.id}</p>
-            <p><b>Tipo:</b> ${tipos}</p>
-            <p><b>Altura:</b> ${(data.height / 10).toFixed(1)} m</p>
-            <p><b>Peso:</b> ${(data.weight / 10).toFixed(1)} kg</p>
-            <p><b>HP:</b> ${data.stats[0].base_stat}</p>
-            <p><b>Velocidad:</b> ${data.stats[5].base_stat}</p>
-            <p><b>Habilidad principal:</b> ${data.abilities[0].ability.name}</p>
-            <button onclick="toggleFavorito(${data.id}, '${data.name}')">
-                <span id="corazon-${data.id}">${esFavoritoActual ? '❤' : '🤍'}</span> Favorito
-            </button>
-        </section>
-    `;
+  // Crear álbum
+  const seccioncapturados = document.createElement("section");
+  seccioncapturados.classList.add("c-lista");
 
-    document.getElementById("root").innerHTML = detalle;
+  let misPokes = "";
+  for (let i = 1; i <= totalPokes; i++) {
+    if (misNumeros.includes(i)) {
+      misPokes += `
+        <div class="c-unpoke c-mios-pokemon poke-${i}" onclick="detalle('${i}')">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i}.png" 
+               width="auto" height="45" loading="lazy" alt="${i}">
+          <p>${i}</p>
+        </div>`;
+    } else {
+      misPokes += `
+        <div class="c-unpoke" id="c-unpoke-${i}">
+          <p>${i}</p>
+        </div>`;
+    }
+  }
+
+  seccioncapturados.innerHTML = misPokes;
+
+  // Contador
+  const contador = document.createElement("p");
+  contador.textContent = `${misNumeros.length} / ${totalPokes}`;
+  contador.id = "contador";
+
+  // Agregar todo al DOM
+  root.appendChild(contador);
+  root.appendChild(boton);
+  root.appendChild(capturaAleatorea);
+  root.appendChild(seccioncapturados);
 }

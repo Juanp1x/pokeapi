@@ -1,76 +1,71 @@
-function GenerarLista(lista) {
-    var listapokes = "";
-    for (var i = 0; i < lista.length; i++) {
-        let nombre = lista[i].name;
+// --- home.js ---
+function generarlista(lista) {
+  let listapokes = "";
+  for (let i = 0; i < lista.length; i++) {
+    const url = lista[i].url;
+    const parts = url.split("/").filter(Boolean);
+    const id = parts[parts.length - 1];
+    const nombre = lista[i].name;
 
-        // Extraer ID del URL
-        let url = lista[i].url;
-        let id = url.split("/")[url.split("/").length - 2]; // el penúltimo elemento es el ID
-
-        listapokes += `
-            <div class="un-pokemon" onclick="Detalle(${id})">
-                <p>#${id} ${nombre}</p>
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png">
-            </div>
-        `;
-    }
-    return listapokes;
+    listapokes += `
+      <div class="c-lista-pokemon poke-${id}" onclick="detalle('${id}')">
+        <p>#${id}</p>
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png"
+             height="60" loading="lazy" alt="${nombre}">
+        <p>${nombre}</p>
+      </div>
+    `;
+  }
+  return listapokes;
 }
 
-function buscadorfuncion(asa) {
-    if (asa.length >= 3) {
-        const filtrados = [];
-        for (let i = 0; i < pokemones.length; i++) {
-            const nombre = pokemones[i].name.toLowerCase();
-            if (nombre.includes(asa.toLowerCase())) {
-                filtrados.push(pokemones[i]);
-            }
-        }
-        let listaHTML = GenerarLista(filtrados);
-        document.getElementById("la-lista").innerHTML = listaHTML;
-    } else {
-        let listaHTML = GenerarLista(pokemones); // ← corregido (G mayúscula)
-        document.getElementById("la-lista").innerHTML = listaHTML;
-    }
+function buscadorfuncion(texto) {
+  if (texto.length >= 3) {
+    const filtrados = pokemones.filter(p =>
+      p.name.toLowerCase().includes(texto.toLowerCase())
+    );
+    document.getElementById("la-lista").innerHTML = generarlista(filtrados);
+  } else {
+    document.getElementById("la-lista").innerHTML = generarlista(pokemones);
+  }
 }
 
-function Home() {
-    // Buscador
-    const buscador = document.createElement("input");
-    buscador.classList.add("c-buscador");
-    buscador.type = "text";
-    buscador.placeholder = "Buscar Pokémon...";
-    buscador.addEventListener("input", () => {
-        buscadorfuncion(buscador.value);
-    });
+async function filtroconexion(filtroelegido) {
+  const pokesfiltrados = await conexionlista(filtroelegido);
+  document.getElementById("la-lista").innerHTML = generarlista(pokesfiltrados);
+}
 
-    // Filtros
-    const tipos = [
-        "normal", "fighting", "flying", "poison", "ground", "rock", "bug",
-        "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice",
-        "dragon", "dark", "fairy", "stellar", "unknown"
-    ];
-    const filtro = document.createElement("div");
+function home() {
+  const buscador = document.createElement("input");
+  buscador.classList.add("c-buscador");
+  buscador.type = "text";
+  buscador.placeholder = "Buscar Pokémon...";
+  buscador.addEventListener("input", () => buscadorfuncion(buscador.value));
 
-    for (let i = 0; i < tipos.length; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = tipos[i];
-        btn.addEventListener("click", () => {
-            FiltroConexion(tipos[i]);
-        });
-        filtro.appendChild(btn);
-    }
+  const tipos = [
+    "all", "normal", "fighting", "flying", "poison", "ground", "rock", "bug",
+    "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice",
+    "dragon", "dark", "fairy"
+  ];
 
-    // Lista
-    var contenedorLista = document.createElement("div");
-    contenedorLista.classList.add("c-lista");
-    contenedorLista.id = "la-lista";
+  const filtro = document.createElement("div");
+  filtro.classList.add("c-filtro");
 
-    // Agregar al root
-    document.getElementById("root").appendChild(filtro);
-    document.getElementById("root").appendChild(buscador);
-    document.getElementById("root").appendChild(contenedorLista);
+  tipos.forEach(tipo => {
+    const btn = document.createElement("button");
+    btn.textContent = tipo;
+    btn.addEventListener("click", () => filtroconexion(tipo));
+    filtro.appendChild(btn);
+  });
 
-    // Mostrar todos los pokes de inicio
-    document.getElementById("la-lista").innerHTML = GenerarLista(pokemones);
+  const contenedorlista = document.createElement("div");
+  contenedorlista.classList.add("c-lista");
+  contenedorlista.id = "la-lista";
+  contenedorlista.innerHTML = generarlista(pokemones);
+
+  const root = document.getElementById("root");
+  root.innerHTML = "";
+  root.appendChild(buscador);
+  root.appendChild(filtro);
+  root.appendChild(contenedorlista);
 }
